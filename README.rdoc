@@ -1,19 +1,61 @@
-= ruby-ja-complex-word
+= Ja::ComplexWord
 
-Description goes here.
+== 概要
 
-== Contributing to ruby-ja-complex-word
- 
-* Check out the latest master to make sure the feature hasn't been implemented or the bug hasn't been fixed yet
-* Check out the issue tracker to make sure someone already hasn't requested it and/or contributed it
-* Fork the project
-* Start a feature/bugfix branch
-* Commit and push until you are happy with your contribution
-* Make sure to add tests for it. This is important so I don't break it in a future version unintentionally.
-* Please try not to mess with the Rakefile, version, or history. If you want to have your own version, or is otherwise necessary, that is fine, but please isolate to its own commit so I can cherry-pick around it.
+MeCab の形態素解析結果に複合語の考慮を与えるライブラリ。
+TermExtract::MeCab (Perl ライブラリ) から複合語に関する処理を抜き出し、単体でシンプルに使えるようにしたものです。
 
-== Copyright
+イメージとしては、[東京 特許 許可局 の 名前 が 欲しい です] という形態素の配列があるときに、
+[[東京 特許 許可局] の [名前] が 欲しい です] のように flat ではない 2 次元配列へとパースしてくれるものです。
 
-Copyright (c) 2011 tily. See LICENSE.txt for
-further details.
+== 使い方
 
+    require 'ja/complex_word'
+    
+    text = 'ABC事件とは東京特許許可局でバスガス爆発が緊急発生した事件のことです'
+    jcw = Ja::ComplexWord.new
+    node_list = jcw.parse(text)
+    node_list.each do |node|
+      if node.is_a?(Array)
+        all = node.map{|n| n.surface }.join
+        puts "#{all}\t複合語"
+        node.each do |n|
+          puts " - #{n.surface}\t#{n.feature}"
+        end
+      else
+        puts "#{node.surface}\t#{node.feature}"
+      end
+    end
+
+    ABC事件 複合語
+     - ABC  ,
+     - 事件 名詞,一般,*,*,*,*,事件,ジケン,ジケン
+    と      助詞,格助詞,一般,*,*,*,と,ト,ト
+    は      助詞,係助詞,*,*,*,*,は,ハ,ワ
+    東京特許許可局  複合語
+     - 東京 名詞,固有名詞,地域,一般,*,*,東京,トウキョウ,トーキョー
+     - 特許 名詞,サ変接続,*,*,*,*,特許,トッキョ,トッキョ
+     - 許可 名詞,サ変接続,*,*,*,*,許可,キョカ,キョカ
+     - 局   名詞,接尾,一般,*,*,*,局,キョク,キョク
+    で      助詞,格助詞,一般,*,*,*,で,デ,デ
+    バスガス爆発    複合語
+     - バス 名詞,一般,*,*,*,*,バス,バス,バス
+     - ガス 名詞,一般,*,*,*,*,ガス,ガス,ガス
+     - 爆発 名詞,サ変接続,*,*,*,*,爆発,バクハツ,バクハツ
+    が      助詞,格助詞,一般,*,*,*,が,ガ,ガ
+    緊急発生        複合語
+     - 緊急 名詞,形容動詞語幹,*,*,*,*,緊急,キンキュウ,キンキュー
+     - 発生 名詞,サ変接続,*,*,*,*,発生,ハッセイ,ハッセイ
+    し      動詞,自立,*,*,サ変・スル,連用形,する,シ,シ
+    た      助動詞,*,*,*,特殊・タ,基本形,た,タ,タ
+    事件    名詞,一般,*,*,*,*,事件,ジケン,ジケン
+    の      助詞,連体化,*,*,*,*,の,ノ,ノ
+    こと    名詞,非自立,一般,*,*,*,こと,コト,コト
+    です    助動詞,*,*,*,特殊・デス,基本形,です,デス,デス
+
+== 使い方
+
+== ライセンス
+
+Term::Extract のライセンスと同様にしたいと思います。
+(Term::Extract のライセンス自体がどうなっているかよく分かりませんが…。)
