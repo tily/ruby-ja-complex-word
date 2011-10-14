@@ -14,11 +14,11 @@ require 'rake'
 require 'jeweler'
 Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
-  gem.name = "ruby-ja-complex-word"
+  gem.name = "ja-complex-word"
   gem.homepage = "http://github.com/tily/ruby-ja-complex-word"
   gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
+  gem.summary = %Q{日本語テキストに含まれる複合語をパースするライブラリ}
+  gem.description = %Q{日本語テキストに含まれる複合語をパースするライブラリ}
   gem.email = "tily05@gmail.com"
   gem.authors = ["tily"]
   # dependencies defined in Gemfile
